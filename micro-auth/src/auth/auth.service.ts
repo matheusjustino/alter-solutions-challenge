@@ -43,7 +43,7 @@ export class AuthService {
 				return user;
 			}),
 			catchError((error) => {
-				this.logger.error(`Validate Token Error`);
+				this.logger.error(`Validate Token Error: ${error}`);
 
 				throw new RpcException(error);
 			}),
@@ -65,7 +65,7 @@ export class AuthService {
 			}),
 			switchMap((result) => {
 				if (!result) {
-					throw new RpcException('Email or password invalid!');
+					throw new RpcException('Password invalid!');
 				}
 
 				const token = this.jwtService.sign({ email: loginDto.email });
@@ -73,7 +73,7 @@ export class AuthService {
 				return of({ token, email: loginDto.email });
 			}),
 			catchError((error) => {
-				this.logger.error(`Login Error`);
+				this.logger.error(`Login Error: ${error}`);
 
 				throw new RpcException(error);
 			}),
@@ -91,7 +91,7 @@ export class AuthService {
 			this.userRepository.userModel.create(createAccountDto),
 		).pipe(
 			catchError((error) => {
-				this.logger.error(`Create Account Error`);
+				this.logger.error(`Create Account Error: ${error}`);
 
 				throw new RpcException(error);
 			}),

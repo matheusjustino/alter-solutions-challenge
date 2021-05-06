@@ -29,7 +29,7 @@ export class JwtAuthGuard implements CanActivate {
 		this.logger.log('Buscando a requição', 'JwtAuthGuard');
 
 		if (!req.headers['authorization']) {
-			throw new UnauthorizedException('Sem token de autorização');
+			throw new UnauthorizedException('Token not provie');
 		}
 
 		try {

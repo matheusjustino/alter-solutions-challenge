@@ -30,7 +30,11 @@ export class AccountService {
 			.send('create-account', createAccountDto)
 			.pipe(
 				switchMap(() => of({ message: 'Account created' })),
-				catchError((error) => throwError(error)),
+				catchError((error) => {
+					this.logger.error(`Create Account Error`);
+
+					return throwError(error);
+				}),
 			);
 	}
 
@@ -38,11 +42,11 @@ export class AccountService {
 		this.logger.log(`Login - Payload: ${JSON.stringify(loginDto)}`);
 
 		return this.microAuthClient.send('login', loginDto).pipe(
-			map((result) => {
-				console.log(result);
-				return result;
+			catchError((error) => {
+				this.logger.error(`Login Error`);
+
+				return throwError(error);
 			}),
-			catchError((error) => throwError(error)),
 		);
 	}
 
@@ -50,11 +54,11 @@ export class AccountService {
 		this.logger.log(`Validate Token - Payload: ${JSON.stringify(token)}`);
 
 		return this.microAuthClient.send('validate-token', token).pipe(
-			map((result) => {
-				console.log(result);
-				return result;
+			catchError((error) => {
+				this.logger.error(`validate Token Error`);
+
+				return throwError(error);
 			}),
-			catchError((error) => throwError(error)),
 		);
 	}
 }
